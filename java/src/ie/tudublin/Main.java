@@ -8,6 +8,7 @@ public class Main
 
         Animal misty = new Animal("Misty");
         Animal lucy = new Animal("Lucy");
+        int mylife;
 
         lucy = misty;
         misty.setName("Tara");
@@ -17,6 +18,21 @@ public class Main
 
         // Tara Misty
         // Tara Tara
+        Cat ginger = new Cat("Ginger");
+
+
+        
+        mylife = ginger.getNumLives();
+        System.out.println(mylife);
+
+        while( ginger.kill() != 0 );
+           
+             
+        
+       
+
+        
+
         
     }
 }

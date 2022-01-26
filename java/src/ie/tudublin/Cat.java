@@ -16,21 +16,27 @@ public class Cat extends Animal
         this.numLives = numLives;
     }
 
+    public int getNumLives()
+    {
+        return this.numLives;
+    }
+
+
+
     public int kill()
     {
-        
-        this.setNumLives(this.numLives);
+        this.numLives-- ;
 
         if (this.numLives > 0 )
         {
             System.out.println("ouch");
-            return this.numLives = this.numLives - 1;
+            return this.numLives;
         
         }
-
         else
         {
             System.out.println("Dead");
+            this.numLives = 0;
             return 0;
 
         }
