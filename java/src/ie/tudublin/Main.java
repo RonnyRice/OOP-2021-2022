@@ -15,6 +15,11 @@ public class Main
         System.out.println(misty);
         System.out.println(lucy);
 
+        Cat ginger = new Cat("Ginger");
+
+
+        while( ginger.kill() != 0 );
+
         // Tara Misty
         // Tara Tara
         
