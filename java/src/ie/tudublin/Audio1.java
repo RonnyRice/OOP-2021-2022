@@ -21,7 +21,7 @@ public class Audio1 extends PApplet
     float y;
     float smoothedY;
     float lerpedA = 0;
-    
+    int mode;
     
     public void settings()
     {
