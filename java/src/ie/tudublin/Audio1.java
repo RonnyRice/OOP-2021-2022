@@ -27,7 +27,7 @@ public class Audio1 extends PApplet
     public void setup()
     {
         minim =  new Minim(this);
-        ai = minim. getLineIn(Minim.MONO, width, 44100, 16 ); 
+        ai = minim.getLineIn(Minim.MONO, width, 44100, 16 ); 
         /* whe you want to monitor the active input of the computer.
         the sammple buffer is the size of the screen,
         sample rate is 44100 and 
@@ -70,7 +70,7 @@ public class Audio1 extends PApplet
 
 
         circle(100, y, 50);
-        y = random(-10, 10);
+        y = random(-10, 10); 
         smoothedY = lerp(smoothedY, y, 0.1f);
         circle(100, smoothedY, 50);
 
