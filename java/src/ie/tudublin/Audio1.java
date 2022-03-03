@@ -5,48 +5,33 @@ import ddf.minim.AudioInput;
 import ddf.minim.AudioPlayer;
 import ddf.minim.Minim;
 import processing.core.PApplet;
-import ddf.minim.AudioBuffer;
-import ddf.minim.AudioInput;
-import ddf.minim.AudioPlayer;
-import ddf.minim.Minim;
-import processing.core.PApplet;
 
 public class Audio1 extends PApplet
 {
     Minim minim;
-    AudioPlayer ap; //get playet 
-    AudioInput ai; // get input
-    AudioBuffer ab; // get buffer
+    AudioPlayer ap;
+    AudioInput ai;
+    AudioBuffer ab;
 
-    float y;
-    float smoothedY;
-    float lerpedA = 0;
-    int mode;
-    
-  
+    int mode = 0;
 
-    public void setup()
-    {
-        minim =  new Minim(this);
-        ai = minim.getLineIn(Minim.MONO, width, 44100, 16 ); 
-        /* whe you want to monitor the active input of the computer.
-        the sammple buffer is the size of the screen,
-        sample rate is 44100 and 
-        audio bit depth is 16 
-        
-        */
-        ab = ai.mix; // audio buffer
-        colorMode(HSB);
-
-        y = height/2;
-        smoothedY = y;
-    }
+    float[] lerpedBuffer;
+    float y = 0;
+    float smoothedY = 0;
+    float smoothedAmplitude = 0;
 
     public void keyPressed() {
 		if (key >= '0' && key <= '9') {
 			mode = key - '0';
 		}
-		println(mode);
+		if (keyCode == ' ') {
+            if (ap.isPlaying()) {
+                ap.pause();
+            } else {
+                ap.rewind();
+                ap.play();
+            }
+        }
 	}
 
     public void settings()
@@ -55,7 +40,24 @@ public class Audio1 extends PApplet
         //fullScreen(P3D, SPAN);
     }
 
-   
+    public void setup()
+    {
+        minim = new Minim(this);
+        // Uncomment this to use the microphone
+        // ai = minim.getLineIn(Minim.MONO, width, 44100, 16);
+        // ab = ai.mix; 
+        ap = minim.loadFile("heroplanet.mp3", 1024);
+        ap.play();
+        ab = ap.mix;
+        colorMode(HSB);
+
+        y = height / 2;
+        smoothedY = y;
+
+        lerpedBuffer = new float[width];
+    }
+
+    float off = 0;
 
     public void draw()
     {
@@ -63,18 +65,15 @@ public class Audio1 extends PApplet
         float halfH = height / 2;
         float average = 0;
         float sum = 0;
-        for(int i = 0; i < ab.size(); i++)
+        off += 1;
+        // Calculate sum and average of the samples
+        // Also lerp each element of buffer;
+        for(int i = 0 ; i < ab.size() ; i ++)
         {
-            //float c = map(ab.get(i), -1, 1, 0, 255);
-            float c = map(i, 0 , ab.size(), 0, 255);
-            stroke(c,255,255);
-           // line(i, halfH, i, halfH + ab.get(i) * halfH);
-             /* reading values from buffer and multiplying it by height.
-             the default value will the buffer would be -1 to 1
-            */
-
             sum += abs(ab.get(i));
+            lerpedBuffer[i] = lerp(lerpedBuffer[i], ab.get(i), 0.05f);
         }
+        average= sum / (float) ab.size();
 
         smoothedAmplitude = lerp(smoothedAmplitude, average, 0.1f);
         
@@ -147,16 +146,15 @@ public class Audio1 extends PApplet
         // Other examples we made in the class
         /*
         stroke(255);
-        fill(100,255,255);
-        lerpedA = lerp(lerpedA, average, 0.1f);
-        circle(width / 2 ,halfH, average * 100);
-
+        fill(100, 255, 255);        
+        
+        circle(width / 2, halfH, lerpedA * 100);
 
         circle(100, y, 50);
-        y = random(-10, 10); 
-        smoothedY = lerp(smoothedY, y, 0.1f);
-        circle(100, smoothedY, 50);
+        y += random(-10, 10);
+        smoothedY = lerp(smoothedY, y, 0.1f);        
+        circle(200, smoothedY, 50);
         */
-    }
-    
+
+    }        
 }
